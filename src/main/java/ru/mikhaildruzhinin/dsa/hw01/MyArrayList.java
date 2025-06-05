@@ -19,11 +19,23 @@ public class MyArrayList<E> {
     if (initMemoryIncreasePower < 0) {
       throw new IllegalArgumentException("Value of initMemoryIncreasePower cannot be negative.");
     }
+
     this.memoryIncreaseBase = memoryIncreaseBase;
     memoryIncreasePower = initMemoryIncreasePower;
-    int initSize = (int) Math.ceil(Math.pow(memoryIncreaseBase, initMemoryIncreasePower));
+
+    int initSize = calculateRaisedToThePower(this.memoryIncreaseBase, this.memoryIncreasePower);
     System.out.println("initSize=" + initSize);
     this.memory = new Object[initSize];
+  }
+
+  private static int calculateRaisedToThePower(int base, int power) {
+    int result = 1;
+    if (power != 0) {
+      for (int i = 1; i <= power; i++) {
+        result = result * base;
+      }
+    }
+    return result;
   }
 
   public E get(int index) throws IndexOutOfBoundsException {
@@ -45,8 +57,10 @@ public class MyArrayList<E> {
 
   private Object[] increaseMemory() {
     memoryIncreasePower++;
-    int newMemorySize = (int) Math.ceil(Math.pow(memoryIncreaseBase, memoryIncreasePower));
+
+    int newMemorySize = calculateRaisedToThePower(memoryIncreaseBase, memoryIncreasePower);
     System.out.println("newSize=" + newMemorySize);
+
     Object[] newMemory = new Object[newMemorySize];
     for (int i = 0; i <= lastIndex; i++) {
       System.out.println("realloc index=" + i + " element=" + memory[i]);
