@@ -8,33 +8,21 @@ public class MyArrayList<E> {
 
   private int lastIndex = -1;
 
-  private final int memoryIncreaseBase;
+  private int memorySize;
 
-  private int memoryIncreasePower;
+  private final int memoryIncreaseRate;
 
-  public MyArrayList(int memoryIncreaseBase, int initMemoryIncreasePower) throws IllegalArgumentException {
-    if (memoryIncreaseBase <= 1) {
-      throw new IllegalArgumentException("Value of memoryIncreaseBase cannot be less than or equal to 1.");
+  public MyArrayList(int initMemorySize, int memoryIncreaseRate) throws IllegalArgumentException {
+    if (initMemorySize < 1) {
+      throw new IllegalArgumentException("Value of initMemorySize cannot be less than 1.");
     }
-    if (initMemoryIncreasePower < 0) {
-      throw new IllegalArgumentException("Value of initMemoryIncreasePower cannot be negative.");
+    if (memoryIncreaseRate < 1) {
+      throw new IllegalArgumentException("Value of memoryIncreaseRate cannot be less than 1.");
     }
 
-    this.memoryIncreaseBase = memoryIncreaseBase;
-    memoryIncreasePower = initMemoryIncreasePower;
-
-    int initSize = calculateRaisedToThePower(this.memoryIncreaseBase, this.memoryIncreasePower);
-    this.memory = new Object[initSize];
-  }
-
-  private static int calculateRaisedToThePower(int base, int power) {
-    int result = 1;
-    if (power != 0) {
-      for (int i = 1; i <= power; i++) {
-        result = result * base;
-      }
-    }
-    return result;
+    memorySize = initMemorySize;
+    this.memoryIncreaseRate = memoryIncreaseRate;
+    this.memory = new Object[memorySize];
   }
 
   public E get(int index) throws IndexOutOfBoundsException {
@@ -53,11 +41,8 @@ public class MyArrayList<E> {
   }
 
   private Object[] increaseMemory() {
-    memoryIncreasePower++;
-
-    int newMemorySize = calculateRaisedToThePower(memoryIncreaseBase, memoryIncreasePower);
-
-    Object[] newMemory = new Object[newMemorySize];
+    memorySize = memorySize * memoryIncreaseRate;
+    Object[] newMemory = new Object[memorySize];
     for (int i = 0; i <= lastIndex; i++) {
       newMemory[i] = memory[i];
     }
@@ -69,7 +54,7 @@ public class MyArrayList<E> {
       throw new IndexOutOfBoundsException("Array has a minimum index of 0 and a maximum index of " + lastIndex + ".");
     }
     if (memory.length <= (lastIndex + 1)) {
-      increaseMemory();
+      memory = increaseMemory();
     }
     for (int i = lastIndex + 1; i >= index; i--) {
       E newElement = (i > 0) ? (E) memory[i - 1] : null;
