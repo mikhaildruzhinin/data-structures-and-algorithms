@@ -24,7 +24,6 @@ public class MyArrayList<E> {
     memoryIncreasePower = initMemoryIncreasePower;
 
     int initSize = calculateRaisedToThePower(this.memoryIncreaseBase, this.memoryIncreasePower);
-    System.out.println("initSize=" + initSize);
     this.memory = new Object[initSize];
   }
 
@@ -46,8 +45,6 @@ public class MyArrayList<E> {
   }
 
   public void add(E element) {
-    System.out.println("current_array=" + this);
-    System.out.println("inserting element=" + element);
     if (memory.length <= (lastIndex + 1)) {
       memory = increaseMemory();
     }
@@ -59,11 +56,9 @@ public class MyArrayList<E> {
     memoryIncreasePower++;
 
     int newMemorySize = calculateRaisedToThePower(memoryIncreaseBase, memoryIncreasePower);
-    System.out.println("newSize=" + newMemorySize);
 
     Object[] newMemory = new Object[newMemorySize];
     for (int i = 0; i <= lastIndex; i++) {
-      System.out.println("realloc index=" + i + " element=" + memory[i]);
       newMemory[i] = memory[i];
     }
     return newMemory;
@@ -73,13 +68,11 @@ public class MyArrayList<E> {
     if (index > lastIndex || index < 0) {
       throw new IndexOutOfBoundsException("Array has a minimum index of 0 and a maximum index of " + lastIndex + ".");
     }
-    System.out.println("current_array=" + this);
     if (memory.length <= (lastIndex + 1)) {
       increaseMemory();
     }
     for (int i = lastIndex + 1; i >= index; i--) {
       E newElement = (i > 0) ? (E) memory[i - 1] : null;
-      System.out.println("shift index=" + i + " old=" + memory[i] + " new=" + newElement);
       memory[i] = newElement;
     }
     memory[index] = element;
