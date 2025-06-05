@@ -8,11 +8,22 @@ public class MyArrayList {
 
   private int lastIndex = -1;
 
-  private final int memoryIncreaseSize;
+  private final int memoryIncreaseBase;
 
-  public MyArrayList(int initSize, int memoryIncreaseSize) {
+  private int memoryIncreasePower;
+
+  public MyArrayList(int memoryIncreaseBase, int initMemoryIncreasePower) throws IllegalArgumentException {
+    if (memoryIncreaseBase <= 1) {
+      throw new IllegalArgumentException("Value of memoryIncreaseBase cannot be less than or equal to 1.");
+    }
+    if (initMemoryIncreasePower < 0) {
+      throw new IllegalArgumentException("Value of initMemoryIncreasePower cannot be negative.");
+    }
+    this.memoryIncreaseBase = memoryIncreaseBase;
+    memoryIncreasePower = initMemoryIncreasePower;
+    int initSize = (int) Math.ceil(Math.pow(memoryIncreaseBase, initMemoryIncreasePower));
+    System.out.println("initSize=" + initSize);
     this.memory = new int[initSize];
-    this.memoryIncreaseSize = memoryIncreaseSize;
   }
 
   public int get(int index) throws IndexOutOfBoundsException {
@@ -23,24 +34,42 @@ public class MyArrayList {
   }
 
   public void add(int element) {
-    if (memory.length < lastIndex + 1) {
-      memory = new int[lastIndex + memoryIncreaseSize];
+    System.out.println("current_array=" + this);
+    System.out.println("inserting element=" + element);
+    if (memory.length <= (lastIndex + 1)) {
+      memory = increaseMemory();
     }
     memory[lastIndex + 1] = element;
     lastIndex++;
+  }
+
+  private int[] increaseMemory() {
+    memoryIncreasePower++;
+    int newMemorySize = (int) Math.ceil(Math.pow(memoryIncreaseBase, memoryIncreasePower));
+    System.out.println("newSize=" + newMemorySize);
+    int[] newMemory = new int[newMemorySize];
+    for (int i = 0; i <= lastIndex; i++) {
+      System.out.println("realloc index=" + i + " element=" + memory[i]);
+      newMemory[i] = memory[i];
+    }
+    return newMemory;
   }
 
   public void add(int index, int element) throws IndexOutOfBoundsException {
     if (index > lastIndex || index < 0) {
       throw new IndexOutOfBoundsException(); // TODO: add error message
     }
-    if (memory.length < lastIndex + 1) {
-      memory = new int[lastIndex + memoryIncreaseSize];
+    System.out.println("current_array=" + this);
+    if (memory.length <= (lastIndex + 1)) {
+      increaseMemory();
     }
-    for (int i = lastIndex; i > index; i--) {
-      memory[i] = memory[i - 1];
+    for (int i = lastIndex + 1; i >= index; i--) {
+      int newElement = (i > 0) ? memory[i - 1] : 0;
+      System.out.println("shift index=" + i + " old=" + memory[i] + " new=" + newElement);
+      memory[i] = newElement;
     }
     memory[index] = element;
+    lastIndex++;
   }
 
   public int remove() throws NoSuchElementException {
@@ -79,14 +108,12 @@ public class MyArrayList {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder("[");
-    for (int i : memory) {
+    for (int i = 0; i <= lastIndex; i++) {
       sb.append(memory[i]);
-      if (i < memory.length - 1) {
+      if (i != lastIndex) {
         sb.append(", ");
-      } else {
-        sb.append("]");
       }
     }
-    return sb.toString();
+    return sb.append("]").toString();
   }
 }
