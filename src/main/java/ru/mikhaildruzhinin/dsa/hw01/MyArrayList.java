@@ -2,9 +2,9 @@ package ru.mikhaildruzhinin.dsa.hw01;
 
 import java.util.NoSuchElementException;
 
-public class MyArrayList {
+public class MyArrayList<E> {
 
-  private int[] memory;
+  private Object[] memory;
 
   private int lastIndex = -1;
 
@@ -23,17 +23,17 @@ public class MyArrayList {
     memoryIncreasePower = initMemoryIncreasePower;
     int initSize = (int) Math.ceil(Math.pow(memoryIncreaseBase, initMemoryIncreasePower));
     System.out.println("initSize=" + initSize);
-    this.memory = new int[initSize];
+    this.memory = new Object[initSize];
   }
 
-  public int get(int index) throws IndexOutOfBoundsException {
+  public E get(int index) throws IndexOutOfBoundsException {
     if (index > lastIndex || index < 0) {
       throw new IndexOutOfBoundsException(); // TODO: add error message
     }
-    return memory[index];
+    return (E) memory[index];
   }
 
-  public void add(int element) {
+  public void add(E element) {
     System.out.println("current_array=" + this);
     System.out.println("inserting element=" + element);
     if (memory.length <= (lastIndex + 1)) {
@@ -43,11 +43,11 @@ public class MyArrayList {
     lastIndex++;
   }
 
-  private int[] increaseMemory() {
+  private Object[] increaseMemory() {
     memoryIncreasePower++;
     int newMemorySize = (int) Math.ceil(Math.pow(memoryIncreaseBase, memoryIncreasePower));
     System.out.println("newSize=" + newMemorySize);
-    int[] newMemory = new int[newMemorySize];
+    Object[] newMemory = new Object[newMemorySize];
     for (int i = 0; i <= lastIndex; i++) {
       System.out.println("realloc index=" + i + " element=" + memory[i]);
       newMemory[i] = memory[i];
@@ -55,7 +55,7 @@ public class MyArrayList {
     return newMemory;
   }
 
-  public void add(int index, int element) throws IndexOutOfBoundsException {
+  public void add(int index, E element) throws IndexOutOfBoundsException {
     if (index > lastIndex || index < 0) {
       throw new IndexOutOfBoundsException(); // TODO: add error message
     }
@@ -64,7 +64,7 @@ public class MyArrayList {
       increaseMemory();
     }
     for (int i = lastIndex + 1; i >= index; i--) {
-      int newElement = (i > 0) ? memory[i - 1] : 0;
+      E newElement = (i > 0) ? (E) memory[i - 1] : null;
       System.out.println("shift index=" + i + " old=" + memory[i] + " new=" + newElement);
       memory[i] = newElement;
     }
@@ -72,21 +72,21 @@ public class MyArrayList {
     lastIndex++;
   }
 
-  public int remove() throws NoSuchElementException {
+  public E remove() throws NoSuchElementException {
     if (lastIndex < 0) {
       String errorMessage = "Element does not exist.";
       throw new NoSuchElementException(errorMessage);
     }
-    int deletedElement = memory[lastIndex];
+    E deletedElement = (E) memory[lastIndex];
     lastIndex--;
     return deletedElement;
   }
 
-  public int remove(int index) throws IndexOutOfBoundsException {
+  public E remove(int index) throws IndexOutOfBoundsException {
     if (index > lastIndex || index < 0) {
       throw new IndexOutOfBoundsException(); // TODO: add error message
     }
-    int deletedElement = memory[index];
+    E deletedElement = (E) memory[index];
     for (int i = index + 1; i <= lastIndex + 1 ; i++) {
       memory[i - 1] = memory[i];
     }
@@ -94,7 +94,7 @@ public class MyArrayList {
     return deletedElement;
   }
 
-  public void replace(int index, int element) throws IndexOutOfBoundsException {
+  public void replace(int index, E element) throws IndexOutOfBoundsException {
     if (index > lastIndex || index < 0) {
       throw new IndexOutOfBoundsException(); // TODO: add error message
     }
