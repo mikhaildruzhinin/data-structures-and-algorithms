@@ -28,7 +28,7 @@ public class MyArrayList<E> {
 
   public E get(int index) throws IndexOutOfBoundsException {
     if (index > lastIndex || index < 0) {
-      throw new IndexOutOfBoundsException(); // TODO: add error message
+      throw new IndexOutOfBoundsException("Array has a minimum index of 0 and a maximum index of " + lastIndex + ".");
     }
     return (E) memory[index];
   }
@@ -57,7 +57,7 @@ public class MyArrayList<E> {
 
   public void add(int index, E element) throws IndexOutOfBoundsException {
     if (index > lastIndex || index < 0) {
-      throw new IndexOutOfBoundsException(); // TODO: add error message
+      throw new IndexOutOfBoundsException("Array has a minimum index of 0 and a maximum index of " + lastIndex + ".");
     }
     System.out.println("current_array=" + this);
     if (memory.length <= (lastIndex + 1)) {
@@ -84,7 +84,7 @@ public class MyArrayList<E> {
 
   public E remove(int index) throws IndexOutOfBoundsException {
     if (index > lastIndex || index < 0) {
-      throw new IndexOutOfBoundsException(); // TODO: add error message
+      throw new IndexOutOfBoundsException("Array has a minimum index of 0 and a maximum index of " + lastIndex + ".");
     }
     E deletedElement = (E) memory[index];
     for (int i = index + 1; i <= lastIndex + 1 ; i++) {
@@ -96,7 +96,7 @@ public class MyArrayList<E> {
 
   public void replace(int index, E element) throws IndexOutOfBoundsException {
     if (index > lastIndex || index < 0) {
-      throw new IndexOutOfBoundsException(); // TODO: add error message
+      throw new IndexOutOfBoundsException("Array has a minimum index of 0 and a maximum index of " + lastIndex + ".");
     }
     memory[index] = element;
   }
